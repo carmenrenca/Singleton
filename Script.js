@@ -50,7 +50,7 @@ function devolver(){
            console.log("Creado");
          return false
        }else {
-
+         alert("Ya existe una instancia");
    console.log("Ya existe una instancia");
          return true;
        }
