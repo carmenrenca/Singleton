@@ -8,12 +8,15 @@ firebase.initializeApp({
 
 var db = firebase.firestore();
     var instance;
+   var i=0;
 
-     
-   
+
+
+
     function createInstance() {
         var user=document.getElementById("user").value;
         var pas=document.getElementById("pass").value;
+
         var login = new Object();
         login.user=user;
         login.pass=pas;
@@ -28,13 +31,43 @@ var db = firebase.firestore();
 
         return login;
     }
- 
+
+function devolver(){
+    db.collection("users").where("nombre", "==", 'carmen')
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          console.log("ENTRAA");    
+ i++;
+       console.log("i "+i);
+
+            // doc.data() is never undefined for query doc snapshots
+            var nombre=doc.data().nombre;
+            console.log(nombre+"nombrecito")
+       if(nombre=="" && i==1){
+          console.log("false");
+          instance = createInstance();
+           console.log("Creado");
+         return false
+       }else {
+
+   console.log("Ya existe una instancia");
+         return true;
+       }
+        
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+}
+
 
         function  getInstance() {
-
-          var n=  leer();
-          console.log(n+"21")
-            if (!instance || n==null ) {
+ 
+          var aux= devolver();
+    console.log(aux+"ausss");
+            if (!instance && aux) {
                 instance = createInstance();
                   
                 console.log("Creado");
@@ -46,6 +79,7 @@ var db = firebase.firestore();
   }
 function insertarBaseDato(u,p){
     db.collection("users").add({
+      id: 100,
   nombre: u,
   pass: p
 })
@@ -57,16 +91,7 @@ function insertarBaseDato(u,p){
 });
 }
 
-function leer(){
-  
-//var n =db.collection().count();
-//console.log(n+"22");
-var x;
-return x =db.collection("users").get().then(snap => {
-  
-   return snap.size ;
-});
 
-}
+
 
 
